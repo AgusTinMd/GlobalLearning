@@ -1,0 +1,13 @@
+slice, arra.slice(x,y)
+x=desde 
+y=hasta
+
+si no ponemos Y, copia desde X hasta el final
+
+si ponemos -1, nos da el ultimo elemento
+-----------------------------------------
+
+indexof
+le pasamos un valor y nos devuelve la posicion en la que
+se encuentra
+------------------------------
