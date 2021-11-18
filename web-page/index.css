@@ -114,29 +114,80 @@ h1
 }
 
 /* CATALOGO */
-
+/*
+original
 .elements
 {
-    width: 200px;
+    width: 100%;
+    height: 150px;
     padding: 10px;
     margin: 10px;
     background-color: burlywood;
     border: solid 1px gold;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+}
+
+*/
+.elements
+{
+    width: 100%;
+    background-color: burlywood;
+    border: solid 1px gold;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 
 }
+
+
 
 .imagescatalogo
 {
     max-height: 75%;
     max-width: 100%;
+    
+    
 }
 
-.title, .price, .elementinformation
+.product img
+{
+    width: 220px;
+    height: 280px;
+    border: solid 1px gold;
+    border-radius: 30px;
+}
+.product
+{
+    border: solid 2px black;
+    border-radius: 30px;
+    margin: 15px;
+}
+
+.product p
+{
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.title
+{
+    width: 100%;
+    font-weight: normal;
+    font-size: 30px;
+    margin: 2px;
+    text-align: center  ;
+}
+
+.title, .price 
 {
     text-align: center;
 }
 .price
 {
+  text-align: center;
   font-weight: bold;
 }
 
@@ -147,19 +198,56 @@ h1
 
 .elementinformation
 {
- display: flex;
+ text-align: center;
  max-width: 100%;
  margin-bottom: 0.3em;
 }
 
-.buttom
+.button
 {
   background-color: rgb(77, 195, 241);
   padding: 10px;
   border: solid 1px rgb(77, 195, 241);
   border-radius: 8px;
   margin-top: 0.3em;
+  margin-bottom: 0.5    m;
   display: block;
   margin-left: auto;
   margin-right: auto;
 }
+
+.order-selected
+{
+    background-color: burlywood;
+    border: solid 1px gold;
+    text-align: center;
+    border-radius: 50px;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    
+}
+.order-selected > img
+{
+    width: 220px;
+    height: 220px;
+    border-radius: 30px;
+    border: solid 1px gold;
+}
+
+.order-selected > p
+{
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.order-selected > title
+{
+    padding: 20px;
+    width: 100%;
+    font-weight: normal;
+    font-size: 30px;
+    margin: 1px;
+}
+
