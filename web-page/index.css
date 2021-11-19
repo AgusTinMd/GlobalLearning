@@ -11,17 +11,19 @@ html, body
 body
 {
     font-family: 'Times New Roman', Times, serif;
-    background-color: burlywood;
+    background-color: rgb(199, 162, 114);
 }
 header
 {
+    text-align: center;
     display: block;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    background-color: lightblue;
-    padding: 5px;
+    background-color: rgb(199, 162, 114);
+    padding: 3px;
+    font-size: 35px;
 }
 
 nav a:visited,
@@ -38,9 +40,10 @@ nav>ul
 
 nav > ul > li 
 {
+    padding: 5px;
     display: inline-block;
     list-style: none;
-    margin: 0 5px 0 5px;
+    margin: 0 35px 0 30px;
 }
 
 main>aside>img
@@ -56,11 +59,17 @@ main
     padding-top: 2em;
     padding-bottom: 3em;
     min-height: 85%;
+    
+}
+.imgwoman
+{
+    border: solid 10px black;
 }
 
 footer
 {
     padding: 10px;
+
 }
 aside, article
 {
@@ -86,6 +95,8 @@ article > img
 .contactp
 {
     color: white;
+    background-color: rgb(199, 162, 114);
+    border: solid 1px black;
 }
 .contacta
 {
@@ -114,14 +125,17 @@ article > img
 h1
 {
   color: white;
-  font-size: 1.5em;
+  background-color: rgb(199, 162, 114);
+  border: solid 0.01em black;
+  text-align: center;
+  font-size: 3.5em;
   margin-top: 0.5em;
 }
 
 .subtitle
 {
     background-color: rgb(199, 162, 114);
-    font-size: 0.8em;
+    font-size: 1.4em;
     padding: 0.2em;
     border: solid 0.1em black;
     margin-top: 0.3em;
@@ -152,7 +166,7 @@ original
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-
+    
 }
 
 
@@ -192,7 +206,7 @@ original
     font-weight: normal;
     font-size: 30px;
     margin: 2px;
-    text-align: center  ;
+    text-align: center;
 }
 
 .title, .price 
@@ -238,13 +252,24 @@ original
   border-radius: 8px;
   margin-top: 0.3em;
   margin-bottom: 0.5m;
-  color: white;
-  padding: 10px;
+  padding: 10px 10px;
   text-decoration: none;
   display: block;
   font-size: 16px;
+  font-weight: 18px;
   margin-left: auto;
   margin-right: auto;
+  transition-duration: 0.4s;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  margin: 0 auto 0;
+  min-height: 15px;
+  overflow: hidden;
+}
+.button:hover
+{
+    background-color: #4CAF50;
+    color: white;
+    
 }
 
 input
@@ -342,4 +367,19 @@ input
 .myClass
 {
     text-align: center;
+    font-size: 22px;
+    margin: 0 35px 0 30px;
+}
+
+
+.orderorder
+{
+    color: white;
+    /* background-color: rgb(199, 162, 114); */
+    background-color: transparent ;
+    border: solid 0.01em transparent; 
+    text-align: center;
+    font-size: 3.5em;
+    margin-top: 0.5em;
+    margin-bottom: 0.2em;
 }
