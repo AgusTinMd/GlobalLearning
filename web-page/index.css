@@ -55,7 +55,7 @@ main>aside>img
 main
 {
     display: block;
-    background-image: url("images/background\ 3.jpg");
+    background-image: url("images/background4.jpg");
     padding-top: 2em;
     padding-bottom: 3em;
     min-height: 85%;
@@ -95,8 +95,8 @@ article > img
 .contactp
 {
     color: white;
-    background-color: rgb(199, 162, 114);
-    border: solid 1px black;
+    /* background-color: rgb(199, 162, 114);
+    border: solid 1px black; */
 }
 .contacta
 {
@@ -383,3 +383,25 @@ input
     margin-top: 0.5em;
     margin-bottom: 0.2em;
 }
+
+.logos > a > img
+{
+    
+    width: 60px;
+    height: 55px;
+    margin: auto;
+    vertical-align: middle;
+    margin-right: 8px;
+    margin-top: 10px;
+    
+}
+
+.logos > a
+{
+    text-decoration: none;
+    display:table;
+    color: white;
+    text-size-adjust: 10px;
+    
+}
+
