@@ -1,79 +1,85 @@
-const { response } = require("express");
-const jwt = require('jsonwebtoken');
-
 const booksController = (Book) => {
+  const getAllBooks = async (req, res) => {
+    const {query} = req;
+    const allBooks = await Book.find(query);
 
-  const getBooks = async(req, res) => {
-    const { query } = req;
-    const response = await Book.find(query);
+    res.json(allBooks);
+  };
 
-    res.json(response);
-  }
-
-  const postBooks = async(req, res) => {
+  const postBooks = async (req, res) => {
     const book = new Book(req.body);
     await book.save();
+
     res.json(book);
-  }
+  };
 
-  const getBooksbyID = async(req, res) => {
-    const { params } = req;
-    const response = await Book.findById(params.bookId);
-    res.json(response);
-}
+  const getBooksById = async (req, res) => {
+    try {
+      const {params} = req;
+      const bookFind = await Book.findById(params.bookId);
 
-const putBooks = async(req,res) => {
-  const {body} = req;
-  const response = await Book.updateOne({
-    _id: req.params.bookId
-  }, {
-    $set: {
-      title: body.title,
-      genre: body.genre,
-      author: body.author,
-      read: body.read
+      res.json(bookFind);
+    } catch {
+      res.json({'message': 'Book not found'});
     }
-  })
-  res.json(response);
-}
-const deleteBooks = async(req,res)=>{
-  const id = req.params.bookId;
+  };
 
-  await Book.findByIdAndDelete(id);
+  const putBooks = async (req, res) => {
+    try {
+      const {body} = req;
 
-  res.status(202).json("Book/s Delete");
+      const bookUpdate = await Book.updateOne({
+        _id: req.params.bookId,
+      }, {
+        $set: {
+          title: body.title,
+          author: body.author,
+          genre: body.genre,
+          read: body.read,
+        },
+      });
 
-}
+      res.json(bookUpdate);
+    } catch {
+      res.json({'message': 'Book not found'});
+    }
+  };
 
-const getBooksByTitle = async(req,res) => {
- const {params} = req;
- const bookfind = await Book.findOne({"title": params.title});
-  if(bookfind===null)
-  {
-    res.json("Invalid Title");
-  }else{
-    res.json(bookfind);
-  }
-}
+  const deleteBooksById = async (req, res) => {
+    try {
+      const bookId = req.params.bookId;
+      await Book.findByIdAndDelete(bookId);
 
-const getBooksByauthor = async(req,res) =>{
-  const {params} = req;
-  const bookfind = await Book.findOne({"author": params.author});
-   if(bookfind===null)
-   {
-     res.json("Invalid Author");
-   }else{
-     res.json(bookfind);
-   }
-}
+      res.json('Book deleted');
+    } catch {
+      res.json({'message': 'Book not found'});
+    }
+  };
 
+  const getSearchBooks = async (req, res) => {
+    const {query} = req;
+    const key = Object.keys(query).join('');
 
+    if (key === 'title') {
+      const bookFind = await Book.findOne({'title': query.title});
 
-  
+      if (bookFind) {
+        res.json(bookFind);
+      } else {
+        res.json({'message': 'Book not found'});
+      }
+    } else if (key === 'author') {
+      const bookFind = await Book.find({'author': query.author});
 
+      if (bookFind.length !== 0) {
+        res.json(bookFind);
+      } else {
+        res.json({'message': 'Book not found'});
+      }
+    }
+  };
 
-  return { getBooks, postBooks, getBooksbyID, putBooks, deleteBooks, getBooksByTitle, getBooksByauthor}  
-}
-
+  return {getAllBooks, postBooks, getBooksById, putBooks, deleteBooksById, getSearchBooks};
+};
 
 module.exports = booksController;

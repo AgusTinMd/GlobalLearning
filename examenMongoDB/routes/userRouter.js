@@ -1,41 +1,29 @@
 const express = require('express');
 const userController = require('../controllers/userController');
-const {userSchema, loginSchema} = require('../validators/usersvalidationchemas')
+const userValidationSchema = require('../validationSchemas/userValidationSchema');
 const validator = require('express-joi-validation').createValidator();
 
 const routes = (User) => {
   const userRouter = express.Router();
 
-  const { getUsers, postUsers, putUsers, deleteUsersById, getUsersbyID, getUserByUsername, Login, validateToken} = userController(User);
+  const {getUsers, postUsers, getUsersById, putUsers, deleteUsersById, getUsersByUserName, postLoginUsers} = userController(User);
 
   userRouter.route('/users')
-    
       .get(getUsers)
+      .post(validator.body(userValidationSchema.userSchema), postUsers);
 
-      .post(validator.body(userSchema), postUsers);
+  userRouter.route('/users/:userId')
+      .get(getUsersById)
+      .put(validator.body(userValidationSchema.userSchema), putUsers)
+      .delete(deleteUsersById);
 
+  userRouter.route('/searchUsers')
+      .get(validator.query(userValidationSchema.queryUserSchema), getUsersByUserName);
 
-  userRouter
-      .route('/users/:userId')
+  userRouter.route('/users/login')
+      .post(validator.body(userValidationSchema.userLoginSchema), postLoginUsers);
 
-      .get(getUsersbyID)   
-      
-      .put(putUsers)
-
-      .delete(deleteUsersById)
-
-    userRouter
-        .route('/users/searchs/:userName')
-
-        .get(getUserByUsername);
-    
-
-    userRouter
-      .route('/login')
-
-      .post(validator.body(loginSchema),Login)
-
-      return userRouter;
-}
+  return userRouter;
+};
 
 module.exports = routes;

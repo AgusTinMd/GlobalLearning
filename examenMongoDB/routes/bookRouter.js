@@ -1,39 +1,27 @@
 const express = require('express');
 const booksController = require('../controllers/bookController');
-const {schemaBook} = require('../validators/bookValidationSchema');
+
+const bookValidationSchema = require('../validationSchemas/bookValidationSchema');
 const validator = require('express-joi-validation').createValidator();
 
 const routes = (Book) => {
   const bookRouter = express.Router();
-  
-  const { getBooks, postBooks, getBooksbyID, putBooks, deleteBooks, getBooksByTitle, getBooksByauthor} = booksController(Book);
 
+  const {getAllBooks, postBooks, getBooksById, putBooks, deleteBooksById, getSearchBooks} = booksController(Book);
 
-bookRouter.route('/books')
+  bookRouter.route('/books')
+      .get(getAllBooks)
+      .post(validator.body(bookValidationSchema.bookSchema), postBooks);
 
-  .get(getBooks)
+  bookRouter.route('/books/:bookId')
+      .get(getBooksById)
+      .put(validator.body(bookValidationSchema.bookSchema), putBooks)
+      .delete(deleteBooksById);
 
-  
-
-  .post(validator.body(schemaBook), postBooks);
-
-
-bookRouter.route('/books/:bookId')
-
-  .get(getBooksbyID)
-
-  .put(putBooks)
-
-  .delete(deleteBooks)
-
-bookRouter.route('/books/searchs/:title')
-
-  .get(getBooksByTitle)
-
-bookRouter.route('/books/searchs/author/:author')
-
-  .get(getBooksByauthor)
+  bookRouter.route('/searchbooks')
+      .get(validator.query(bookValidationSchema.queryBookSchema), getSearchBooks);
 
   return bookRouter;
-}
+};
+
 module.exports = routes;

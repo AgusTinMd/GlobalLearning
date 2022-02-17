@@ -1,103 +1,104 @@
-const { response } = require("express");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
-
-
 const usersController = (User) => {
+  const getUsers = async (req, res) => {
+    const {query} = req;
+    const allUsers = await User.find(query);
 
-  const getUsers = async(req, res) => {
-    const { query } = req;
-    const response = await User.find(query);
+    res.json(allUsers);
+  };
 
-    res.json(response);
-  }
-
-  const postUsers = async(req, res) => {
+  const postUsers = async (req, res) => {
     const user = new User(req.body);
     user.password = await bcrypt.hash(user.password, 10);
     await user.save();
+
     res.json(user);
-  }
+  };
 
-  const putUsers = async(req, res) => {
+  const getUsersById = async (req, res) => {
+    try {
+      const {params} = req;
+      const userToFind = await User.findById(params.userId);
+
+      res.json(userToFind);
+    } catch {
+      res.json({'message': 'Invalid Credential'});
+    }
+  };
+
+  const putUsers = async (req, res) => {
+    try {
+      const {body} = req;
+
+      const userUpdate = await User.updateOne({
+        _id: req.params.userId,
+      }, {
+        $set: {
+          firstName: body.firstName,
+          lastName: body.lastName,
+          userName: body.userName,
+          password: await bcrypt.hash(body.password, 10),
+          email: body.email,
+          address: body.address,
+          phone: body.phone,
+        },
+      });
+
+      res.json(userUpdate);
+    } catch {
+      res.json({'message': 'Invalid Credential'});
+    }
+  };
+
+  const deleteUsersById = async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      await User.findByIdAndDelete(userId);
+
+      res.json('User/s Deleted');
+    } catch {
+      res.json({'message': 'Invalid Credential'});
+    }
+  };
+
+  const getUsersByUserName = async (req, res) => {
     const {body} = req;
-    const response = await User.updateOne({
-      _id: req.params.userId
-    }, {
-      $set:{
-        firstName: body.firstName,
-        lastName: body.lastName,
-        userName: body.userName,
-        password: await bcrypt.hash(body.password,10),
-        email: body.email,
-        address: body.address,
-        phone: body.phone
-      }
-    });
-    res.json(response)
-  }
+    const userToFind = await User.findOne({'userName': body.userName});
 
-  const deleteUsersById = async(req, res) => {
-    const id = req.params.userId;
-    await User.findByIdAndDelete(id);
-    res.status(202).json("User/s Deleted");
-  }
-
-  const getUsersbyID = async(req,res) => {
-    const {params} = req;
-    const response = await User.findById(params.userId);
-    res.json(response);
-  }
-
-  const getUserByUsername = async (req, res) => {
-    const {params} = req;
-    const user = await User.findOne({"userName": params.userName});
-
-    if(user===null)
-    {
-      res.json("Invalid Credentials");
-    }else{
-      res.json(user);
+    if (userToFind) {
+      res.json(userToFind);
+    } else {
+      res.json({'message': 'Invalid Credential'});
     }
-    
-  }
+  };
 
-  const Login = async(req,res) => {
+  const postLoginUsers = async (req, res) => {
     const {body} = req;
-    var response = await User.findOne({
-      'userName':body.userName
-    });
+    const userToFind = await User.findOne({'userName': body.userName});
 
-    if(response===null){
+    if (userToFind && await bcrypt.compare(body.password, userToFind.password)) {
+      const token = createToken(userToFind);
 
-      res.status(401).json('Invalid Credentials')
+      res.json({message: 'Valid credentials',token,});
 
-    }else if( await bcrypt.compare(body.password, response.password)){
-
-      const savedUser = response;
-      const token = generateToken(savedUser);
-      response = {message: 'Ok',token};
-      
-
-    }else{
-      response = {message: 'Invalid Credential'}
+    } else {
+      res.json({message: 'Invalid credentials'});
     }
-    res.json(response);
-     
-  }
+  };
 
-  const generateToken = savedUser => {
-    const tokenPayload = {
-      name: savedUser.name,
-      userName: savedUser.userName,
-      lastName: savedUser.lastName
-    }
-    return jwt.sign(tokenPayload,'secret', {expiresIn: '12h'});
-  }
+  const createToken = (userToFind) => {
+    const payload = {
+      firstName: userToFind.firstName,
+      lastName: userToFind.lastName,
+      userName: userToFind.userName,
+    };
 
+    return jwt.sign(payload, 'secret', {expiresIn: '12h'});
+  };
 
-  return {getUsers, postUsers, putUsers, deleteUsersById, getUsersbyID, getUserByUsername, Login,};
-}
+  return {getUsers, postUsers, getUsersById, putUsers, deleteUsersById, getUsersByUserName, postLoginUsers};
+};
 
 module.exports = usersController;
